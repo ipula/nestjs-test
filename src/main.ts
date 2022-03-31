@@ -5,6 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import * as fs from 'fs';
 import * as morgan from 'morgan';
+import { TransformInterceptor } from './transform.interceptor';
 
 const logStream = fs.createWriteStream('api.log', {
   flags: 'a' //append
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
   app.use(morgan('combined', { stream: logStream }));
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   const config = new DocumentBuilder()
     .setTitle('Task example')
